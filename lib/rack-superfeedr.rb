@@ -21,7 +21,7 @@ module Rack
       @error
     end
 
-    def list(page = 1,callback_url)
+    def list(page = 1,callback_url,opts = {}, &block)
 
       response = ::Typhoeus::Request.post(SUPERFEEDR_ENDPOINT,
       opts.merge({
