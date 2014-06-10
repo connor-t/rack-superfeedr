@@ -22,7 +22,8 @@ module Rack
     end
 
     def list(page = 1, opts = {}, &block)
-      response = ::Typhoeus::Request.post(SUPERFEEDR_ENDPOINT,
+
+      response = ::Typhoeus::Request.get(SUPERFEEDR_ENDPOINT,
       opts.merge({
         :params => {
           :'hub.mode' => 'list',
