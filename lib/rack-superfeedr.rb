@@ -21,6 +21,21 @@ module Rack
       @error
     end
 
+    def list(page = 1,callback_url)
+
+      response = ::Typhoeus::Request.post(SUPERFEEDR_ENDPOINT,
+      opts.merge({
+        :params => {
+          :'hub.mode' => 'list',
+          :'page' => page,
+          :'hub.callback' =>  callback_url
+        },
+        :userpwd => "#{@params[:login]}:#{@params[:password]}"
+      }))
+      @error = response.body
+      response.code == 202 || response.code == 204 # We return true to indicate the status.
+
+    end
     ##
     # Subscribe you to a url. id is optional, but recommanded has a unique identifier for this url. It will be used to help you identify which feed
     # is concerned by a notification.
@@ -28,7 +43,7 @@ module Rack
     # It returns true if the subscription was successful (or will be confirmed if you used async => true in the options), false otherwise.
     # You can also pass an opts third argument that will be merged with the options used in Typhoeus's Request (https://github.com/dbalatero/typhoeus)
     # A useful option is :verbose => true for example.
-    # If you supply a retrieve option, the content of the feed will be retrieved from Superfeedr as well and your on_notification callback will 
+    # If you supply a retrieve option, the content of the feed will be retrieved from Superfeedr as well and your on_notification callback will
     # will be called with the content of the feed.
     def subscribe(url, id = nil, opts = {}, &block)
       feed_id = "#{id ? id : Base64.urlsafe_encode64(url)}"
