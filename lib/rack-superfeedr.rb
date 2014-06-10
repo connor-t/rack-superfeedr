@@ -21,14 +21,13 @@ module Rack
       @error
     end
 
-    def list(page = 1,callback_url,opts = {}, &block)
-
+    def list(page = 1, opts = {}, &block)
       response = ::Typhoeus::Request.post(SUPERFEEDR_ENDPOINT,
       opts.merge({
         :params => {
           :'hub.mode' => 'list',
           :'page' => page,
-          :'hub.callback' =>  callback_url
+          :'hub.callback' =>  'www.example.com'
         },
         :userpwd => "#{@params[:login]}:#{@params[:password]}"
       }))
